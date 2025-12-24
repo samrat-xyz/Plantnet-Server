@@ -65,6 +65,12 @@ async function run() {
       res.send(result)
     })
 
+    // get all plants data from db
+    app.get('/plants',async(req,res)=>{
+      const result = await plantsCollection.find().toArray()
+      res.send(result)
+    })
+
 
     // Send a ping to confirm a successful connection
     await client.db('admin').command({ ping: 1 })
