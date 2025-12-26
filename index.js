@@ -51,6 +51,7 @@ async function run() {
   try {
     const db = client.db("plantsDB");
     const plantsCollection = db.collection("plants");
+    const userCollection = db.collection("users");
 
     // save a plant data in db
     app.post("/plants", async (req, res) => {
@@ -69,6 +70,19 @@ async function run() {
     app.get("/plants/:id", async (req, res) => {
       const id = req.params.id;
       const result = await plantsCollection.findOne({ _id: new ObjectId(id) });
+      res.send(result);
+    });
+
+    app.post("/users", async (req, res) => {
+      const userData = req.body;
+      const email = req.body.email;
+      const existingUser = await userCollection.findOne({ email });
+      if (existingUser) {
+        return res.status(409).send({
+          message: "User already exists",
+        });
+      }
+      const result = await userCollection.insertOne(userData);
       res.send(result);
     });
 
