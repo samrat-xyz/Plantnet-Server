@@ -75,6 +75,8 @@ async function run() {
 
     app.post("/users", async (req, res) => {
       const userData = req.body;
+      userData.created_At = new Date().toISOString();
+
       const email = req.body.email;
       const existingUser = await userCollection.findOne({ email });
       if (existingUser) {
